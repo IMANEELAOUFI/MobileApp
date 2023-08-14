@@ -21,6 +21,20 @@ class UserController extends Controller
         return $this->successWithMsg($users);
     }
 
+
+ /**
+     * Gets my user
+     *
+     * @return JsonResponse
+     */
+    public function getSessionUser(): JsonResponse
+    {
+        $users = User::whereNotNull('email_verified_at')
+        ->where('id', '=', auth()->user()->id)
+        ->get();
+        return $this->successWithMsg($users);
+    }
+
     /**
      * Delete a user
      *
@@ -30,13 +44,13 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-    
+
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
-    
+
         $user->forceDelete();
-    
+
         return response()->json(['message' => 'User deleted successfully']);
     }
 
