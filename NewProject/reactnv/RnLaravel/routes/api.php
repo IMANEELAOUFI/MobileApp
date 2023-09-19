@@ -44,12 +44,13 @@ Route::middleware('auth:user')->group(function () {
     Route::post('chat_message/{chatId}/upload', [ChatMessageController::class, 'upload'])->name('message');
     Route::get('chat_message/{chatId}/{page}', [ChatMessageController::class, 'index'])->name('chat_message.index');
     Route::get('saved', [ChatMessageController::class, 'savedmessages'])->name('saved');
-    
+
 });
 
 // User Routes
 Route::middleware('auth:user')->group(function () {
     Route::apiResource('user', UserController::class)->only(['index']);
+    Route::get('/sessionUser', [UserController::class, 'getSessionUser']); //this replacement for the other
     Route::post('/users/{id}', [UserController::class, 'destroy']);
 
 });
