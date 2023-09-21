@@ -112,6 +112,7 @@ android {
         versionCode 1
         versionName "1.0"
         targetSdkVersion 33
+        vectorDrawables.useSupportLibrary = true
     }
     project.ext.react = [
     enableHermes: false  // Disable Hermes
