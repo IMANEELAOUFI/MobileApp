@@ -42,7 +42,7 @@ const navigation = useNavigation();
 
   const handleConfirmPress = async () => {
     try {
-      const response = await axios.post('http://192.168.0.150:8000/api/v1/auth/verify_user', {
+      const response = await axios.post('http://192.168.1.7 :8000/api/v1/auth/verify_user', {
         code
       });
 

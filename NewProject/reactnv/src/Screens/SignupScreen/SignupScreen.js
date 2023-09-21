@@ -28,8 +28,8 @@ const SignupScreen = () => {
   const navigation = useNavigation();
 
     const validateEmail = email => {
-    const regex = /^\w+([.-]?\w+)\w+([.-]?\w+)@intellcap\.fr$/;
-    //const regex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
+    //const regex = /^\w+([.-]?\w+)\w+([.-]?\w+)@intellcap\.fr$/;
+    const regex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
     return regex.test(email);
     };
     
@@ -80,7 +80,7 @@ const SignupScreen = () => {
   };
   const handleSignup = async () => {
     try {
-      const response = await axios.post('http://192.168.0.150:8000/api/register', {
+      const response = await axios.post('http://192.168.1.7:8000/api/register', {
         username,
         email,
         phone_number,

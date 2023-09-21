@@ -9,6 +9,8 @@ use App\Models\User\ChatParticipant;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Crypt;
+
 class ChatController extends Controller
 {
     /**
@@ -48,6 +50,9 @@ class ChatController extends Controller
     public function store(StoreChatRequest $request): JsonResponse
     {
         $data = $this->prepareStoreData($request);
+
+        
+
         if ($data['userId'] === $data['otherUserId']) {
             return $this->error('You cannot create a chat with yourself');
         }
@@ -185,6 +190,7 @@ class ChatController extends Controller
     public function show(Chat $chat): JsonResponse
     {
         $chat->load('lastMessage.user', 'participants.user');
+        
         return $this->successWithMsg($chat);
     }
 

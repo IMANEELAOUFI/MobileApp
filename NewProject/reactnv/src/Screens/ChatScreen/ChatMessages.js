@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet,Button,Linking } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ProfilePic from '../../../assets/images/ProfilePic.png';
@@ -11,7 +11,10 @@ import DocumentPicker from 'react-native-document-picker';
 
 
 
-const API_BASE_URL = 'http://192.168.0.150:8000/api';
+
+
+
+const API_BASE_URL = 'http://192.168.1.7:8000/api';
 
 const ChatMessages = () => {
   const [messages, setMessages] = useState([]);
@@ -30,6 +33,10 @@ const ChatMessages = () => {
     console.log(name);
     console.log(length);
   }, []);
+
+   
+
+
 
   const fetchMessages = async () => {
     try {

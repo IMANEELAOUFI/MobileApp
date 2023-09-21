@@ -53,3 +53,12 @@ Route::middleware('auth:user')->group(function () {
     Route::post('/users/{id}', [UserController::class, 'destroy']);
 
 });
+
+//new
+//update-encryption-key Route
+
+
+Route::middleware('auth:api')->post('/update-encryption-key', 'UserController@updateEncryptionKey');
+
+Route::middleware('auth:api')->get('/get-encryption-key/{userId}', 'UserController@getEncryptionKey');
+

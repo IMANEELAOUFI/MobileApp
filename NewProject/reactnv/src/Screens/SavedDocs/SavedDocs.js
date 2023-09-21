@@ -18,7 +18,7 @@ import axios from 'axios';
 import ProfilePic from '../../../assets/images/ProfilePic.png';
 import MultiSelectDropdown from '../../Compenents/MultiSelectDropdown/MultiSelectDropdown';
 
-const API_BASE_URL = 'http://192.168.0.150:8000/api';
+const API_BASE_URL = 'http://192.168.1.7 :8000/api';
 
 const SavedDocs = () => {
   const [chats, setChats] = useState([]);

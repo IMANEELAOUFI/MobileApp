@@ -12,7 +12,7 @@ const Index = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://192.168.0.150:8000/api/user');
+      const response = await axios.get('http://192.168.1.7 :8000/api/user');
       const userData = response.data;
       setUsers(userData);
     } catch (error) {
