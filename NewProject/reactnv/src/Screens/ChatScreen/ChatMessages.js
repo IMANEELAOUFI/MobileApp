@@ -11,7 +11,7 @@ import DocumentPicker from 'react-native-document-picker';
 
 
 
-const API_BASE_URL = 'http://192.168.0.150:8000/api';
+const API_BASE_URL = 'http://192.168.11.101:8000/api';
 
 const ChatMessages = () => {
   const [messages, setMessages] = useState([]);
@@ -49,7 +49,8 @@ const ChatMessages = () => {
       console.error('Error while loading messages:', error.message);
     }
   };
-  
+
+
 
   const sendMessage = async () => {
     try {
@@ -168,7 +169,7 @@ const ChatMessages = () => {
           {item.image_path ? (
   <View style={styles.container}>
     {item.image_path.toLowerCase().endsWith('.pdf') ? (
-      <TouchableOpacity onPress={() => handlePdfLinkPress("http://100.73.96.230:8000" + item.image_path)}>
+      <TouchableOpacity onPress={() => handlePdfLinkPress("http://192.168.11.101:8000" + item.image_path)}>
         <Text style={styles.pdfLink}>Click to open File  {item.image_path}</Text>
       </TouchableOpacity>
     ) : (
@@ -196,6 +197,10 @@ const ChatMessages = () => {
           <View style={styles.header}>
           <Image source={ProfilePic} style={styles.profileAvatar} />
           <Text style={styles.userName}>{contact}</Text>
+
+          <TouchableOpacity  onPress={() => {navigation.navigate('VoiceCall');}}>
+            <MaterialIcons name="call" style={styles.voiceCall} size={24} color="#0000ff" />
+          </TouchableOpacity>
           </View>
           {length >2?<Button title="Quit grp"  onPress={quitGroup}/> : null
 
@@ -322,6 +327,12 @@ const ChatMessages = () => {
       paddingHorizontal: 16,
       paddingVertical: 10,
       dd: 8,
+    },
+    voiceCall: {
+      backgroundColor: '#fff',
+      paddingHorizontal: 100,
+      paddingVertical: 10,
+      
     },
   });
   

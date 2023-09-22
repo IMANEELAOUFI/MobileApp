@@ -21,6 +21,21 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        VoiceCallStarted::class => [
+            VoiceCallStartedListener::class,
+        ],
+        VoiceCallJoined::class => [
+            VoiceCallJoinedListener::class,
+        ],
+        VoiceCallAccepted::class => [
+            VoiceCallAcceptedListener::class,
+        ],
+        VoiceCallDeclined::class => [
+            VoiceCallDeclinedListener::class,
+        ],
+        VoiceCallEnded::class => [
+            VoiceCallEndedListener::class,
+        ],
     ];
 
     /**

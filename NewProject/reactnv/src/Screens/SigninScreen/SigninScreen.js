@@ -25,8 +25,8 @@ const [passwordError, setPasswordError] = useState(false);
 const navigation = useNavigation();
 
 const validateEmail = email => {
- const regex = /^\w+([.-]?\w+)\w+([.-]?\w+)@intellcap\.fr$/;
- //const regex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
+//  const regex = /^\w+([.-]?\w+)\w+([.-]?\w+)@intellcap\.fr$/;
+const regex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
   return regex.test(email);
 }
 const validatePassword = password => {
@@ -56,21 +56,21 @@ const onSignInPressed = () => {
   
     const handleSignin = async () => {
       try {
-        const response = await axios.post('http://192.168.0.150:8000/api/login', {
+        const response = await axios.post('http://192.168.11.101:8000/api/login', {
           email,
           password
         });
-  
         // Handle the response from the backend
+        
         console.log(response.data.data.accessToken);
         await AsyncStorage.setItem('token', response.data.data.accessToken);
+        await AsyncStorage.setItem('User', JSON.stringify(response.data.data.user))
         // Redirect or perform any other action based on the response
         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.data.accessToken}`;
         const role = response.data.data.user.role;
         role == 'user' ?
         navigation.navigate('Home', { name: response.data.data.user.username }):
-        navigation.navigate('Admin', { name: response.data.data.user.username })
-        ;
+        navigation.navigate('Admin', { name: response.data.data.user.username });
       } catch (error) {
         // Handle error
         console.error(error);
@@ -79,6 +79,7 @@ const onSignInPressed = () => {
 
 
 const onSignUpPressed = () => {
+  
 navigation.navigate('Sign up');
 };
 

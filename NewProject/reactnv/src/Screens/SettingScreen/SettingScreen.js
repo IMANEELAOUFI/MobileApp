@@ -17,12 +17,12 @@ const SECTIONS =[
         { id: 'Change profile photo', icon:'camera', label:'Change profile photo', type: 'select'},
     ],
 },
-/*{
+{
     header: 'Account',
     items: [
-        { id: 'Modify personal information', icon:'edit', label:'Modify personal information', type: 'select'},
+        { id: 'Modify personal information', icon:'edit', label:'Update User Info', type: 'select'},
     ],
-},*/
+},
 {
     header: 'Password',
     items: [
@@ -39,6 +39,9 @@ const SettingScreen = () => {
     const onDeconnexionPressed = () => {
         navigation.navigate('Sign in');
     };
+    const OnUpdateUserInfo = () => {
+        navigation.navigate('OnUpdateUserInfo');
+        };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#f6f6f6'}}>
@@ -53,6 +56,7 @@ const SettingScreen = () => {
                     style={styles.profileAvatar}
                     />
                  <View style={{marginLeft: 1}}>
+                 
             <Title style={[styles.title, {
               marginTop:15,
               marginBottom: 5,
@@ -84,6 +88,8 @@ const SettingScreen = () => {
                            <TouchableOpacity onPress={() => {
                             if (label == 'Change password'){
                                 navigation.navigate('Change');
+                            }else if(label == 'Update User Info'){
+                                OnUpdateUserInfo();
                             }
                   }}>
                             <View style={styles.row}>

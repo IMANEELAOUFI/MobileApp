@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, SafeAreaView, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import ProfilePic from '../../../assets/images/ProfilePic.png';
+import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
+
 
 const Index = () => {
   const [users, setUsers] = useState([]);
@@ -12,7 +14,7 @@ const Index = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://192.168.0.150:8000/api/user');
+      const response = await axios.get('http://192.168.11.101:8000/api/user');
       const userData = response.data;
       setUsers(userData);
     } catch (error) {
@@ -21,6 +23,7 @@ const Index = () => {
   };
 
   return (
+    <NavigationContainer>
     <SafeAreaView style={{ flex: 1, marginHorizontal: 20, }}>
       <Text style={styles.title}>Contact</Text>
 
@@ -50,6 +53,10 @@ const Index = () => {
         ))}
       </View>
     </SafeAreaView>
+    <Stack.Navigator>
+        <Stack.Screen name="HomePage" component={HomePage} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

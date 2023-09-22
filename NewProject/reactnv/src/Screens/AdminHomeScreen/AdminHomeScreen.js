@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import ProfilePic from '../../../assets/images/ProfilePic.png';
 
-const API_BASE_URL = 'http://192.168.0.150:8000/api';
+const API_BASE_URL = 'http://192.168.1.53:8000/api';
 
 
 const AdminHomeScreen = () => {

@@ -22,6 +22,7 @@ import ChatScreen from '../Screens/ChatScreen/ChatScreen';
 import PdfScreen from '../Screens/ChatScreen/PdfScreen';
 import ContactScreen from '../Screens/ChatScreen/ContactScreen';
 import ChangePasswordScreen from '../Screens/SettingScreen/ChangePasswordScreen';
+import OnUpdateUserInfo from '../Screens/UpdateUserInfo/OnUpdateUserInfo'
 
 
 
@@ -147,7 +148,7 @@ const Naviagtion = () => {
              <Stack.Screen name="Chat" component={ChScreen} />
              <Stack.Screen name="Change" component={ChangePasswordScreen} />
              <Stack.Screen name="PdfScreen" component={FileScreen} />
-             
+             <Stack.Screen name="OnUpdateUserInfo" component={OnUpdateUserInfo} />
              
 
     </Stack.Navigator>

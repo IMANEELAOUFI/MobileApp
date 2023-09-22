@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/sendIceCandidate', function () {
+    event(new \App\Events\sendIceCandidate());
+    return null;
+});
+Route::get('/sendAnswer', function () {
+    event(new \App\Events\sendAnswer());
+    return null;
+});

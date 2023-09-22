@@ -1,53 +1,45 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, StyleSheet, ScrollView, Alert } from 'react-native';
 import CustomButton from '../../Compenents/CustomButton/CustomButton';
-import { useNavigation } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRoute } from '@react-navigation/native';
 
 
 
-const SignupScreen = () => {
+const OnUpdateUserInfo = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phone_number, setPhone_number] = useState('');
-  const [password, setPassword] = useState('');
-  const [password_confirmation, setPassword_confirmation] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [phoneNumberError, setPhoneNumberError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
-  const [passwordRepeatError, setPasswordRepeatError] = useState(false);
+ 
 
 
-
-
-  const navigation = useNavigation();
+  
 
     const validateEmail = email => {
+      
     // const regex = /^\w+([.-]?\w+)\w+([.-]?\w+)@intellcap\.fr$/;
-    const regex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
-    return regex.test(email);
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    // return regex.test(email);
+    return regex.test(email.trim())
+    
     };
     
-    const validatePassword = password => {
-    return password.length >= 6;
-    };
-
-    const validatePasswordRepeat = password_confirmation => {
-        return  password_confirmation === password;
-        };
+    
 
   const validatePhoneNumber = (phone_number) => {
     const phoneNumberRegex = /^\d{10,14}$/;
-    return phoneNumberRegex.test(phone_number);
+    return phoneNumberRegex.test(phone_number.trim());
   };
 
 
-  const onRegisterPressed = () => {
+  const onUpdatePressed = () => {
     
     const errors = {};
   
@@ -55,67 +47,59 @@ const SignupScreen = () => {
     errors.email = 'Invalid email address';
   }
   
-  if (!validatePassword(password)) {
-    errors.password = ' Password must contain at least 6 characters';
-  }
+  
   
   if (!validatePhoneNumber(phone_number)) {
     errors.phone_number = 'Invalid phone number';
   }
   
-  if (!validatePasswordRepeat(password_confirmation)) {
-    errors.password_confirmation = 'Passwords do not match';
-  }
-  
+  console.log(errors)
   if (Object.keys(errors).length > 0) {
     setEmailError(errors.email || false);
-    setPasswordError(errors.password || false);
     setPhoneNumberError(errors.phone_number || false);
-    setPasswordRepeatError(errors.password_confirmation || false);
-    return;
+    return false;
     
-  }
-  
-  handleSignup(); 
+  } 
+  return true;
   };
-  const handleSignup = async () => {
+  
+  const handleUpdate = async () => {
     try {
-      const response = await axios.post('http://192.168.11.101:8000/api/register', {
+       //getId()
+      const user = await AsyncStorage.getItem('User')
+
+      const token = await AsyncStorage.getItem('token')
+      const id  = JSON.parse(user).id;
+      const response = await axios.put(`http://192.168.11.101:8000/api/user/${id}`, {
         username,
         email,
-        phone_number,
-        password,
-        password_confirmation
-      });
+        phone_number} ,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        
+      })
 
+      
       // Handle the response from the backend
       console.log(response.data);
-
+      Alert.alert('Updated');
       // Redirect or perform any other action based on the response
-      navigation.navigate('Sign in');
+      //navigation.navigate('Sign in');
     } catch (error) {
       // Handle error
       console.error(error);
     }
   };
 
-  const onSignInPressed = () => {
-    navigation.navigate('Sign in');
-  };
+  
 
-  const onTermsUsePressed = () => {
-    console.warn('onTermsUsePressed');
-  };
-
-  const onPrivacyPressed = () => {
-    console.warn('oonPrivacyPressed');
-  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.fot}>
         <View style={styles.root}>
-          <Text style={styles.title}>Create an account</Text>
+          <Text style={styles.title}>Update User Info</Text>
         </View>
         <Animatable.View style={styles.footer} animation="fadeInUpBig">
           <Text style={styles.text_footer}>Username</Text>
@@ -163,67 +147,14 @@ const SignupScreen = () => {
         <Text style={styles.errorMsg}>Invalide phone number</Text> 
           )}
 
-            <Text style={styles.text_footer}>Password</Text>
-        <View style={styles.action}>
-            <Feather 
-                    name="lock"
-                    color="#05375a" 
-                    size={20}
-                />
-              <TextInput 
-                    placeholder="Your password"
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    secureTextEntry={true}
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                />
-              
-        </View>
-        {passwordError && (
-        <Text style={styles.errorMsg}>Password must contain at least 6 characters</Text>
-        )}
-
-        <Text style={styles.text_footer}>Confirm password</Text>
-        <View style={styles.action}>
-            <Feather 
-                    name="lock"
-                    color="#05375a" 
-                    size={20}
-                />
-              <TextInput 
-                    placeholder="Confirm your password"
-                    style={styles.textInput}
-                    autoCapitalize="none"
-                    secureTextEntry={true}
-                    value={password_confirmation}
-                    onChangeText={text => setPassword_confirmation(text)}
-                    
-                />
-              
-        </View>
-        {passwordRepeatError && (
-        <Text style={styles.errorMsg}> Passwords do not match </Text>
-        )}
-
-             <CustomButton 
-              text="Register " 
-              onPress={onRegisterPressed}
-              
-              />  
-             <Text style={styles.text}>
-                By registering, you confirme that you accept our{' '} 
-                <Text style={styles.link} onPress={onTermsUsePressed}>termes of Use</Text> and{' '}  
-                <Text style={styles.link} onPress={onPrivacyPressed}>Privacy Policy</Text>
-                </Text> 
+            
 
              <CustomButton  
-             text="Have an account? Sign In" 
-             onPress={onSignInPressed} 
-             type="TERTIARY" 
+             text="Update" 
+             onPress={()=>onUpdatePressed() && handleUpdate()} 
              />
         </Animatable.View>
-        </View>
+      </View>
     </ScrollView>
     );
 };
@@ -290,4 +221,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignupScreen
+ export default OnUpdateUserInfo

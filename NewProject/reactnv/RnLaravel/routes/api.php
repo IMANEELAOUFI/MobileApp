@@ -48,8 +48,35 @@ Route::middleware('auth:user')->group(function () {
 });
 
 // User Routes
-Route::middleware('auth:user')->group(function () {
-    Route::apiResource('user', UserController::class)->only(['index']);
-    Route::post('/users/{id}', [UserController::class, 'destroy']);
 
+
+// Update User
+Route::middleware('auth:user')->group(function () {
+    Route::apiResource('user', UserController::class)->only(['index', 'update']);
+    Route::post('/users/{id}', [UserController::class, 'destroy']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+}); 
+
+//Voice Call Routes
+
+Route::middleware('auth:user')->group(function () {
+    // Route pour démarrer un appel vidéo
+    Route::post('voice-call/start', [VoiceCallController::class, 'startCall'])->name('voice-call.start');
+    // Route pour accepter un appel vidéo
+    Route::post('voice-call/accept/{callId}', [VoiceCallController::class, 'acceptCall'])->name('voice-call.accept');
+    // Route pour réfuser un appel vidéo
+    Route::post('voice-call/decline/{callId}', [VoiceCallController::class, 'declineCall'])->name('voice-call.decline');
+    // Route pour rejoindre un appel vidéo
+    Route::post('voice-call/join/{callId}', [VoiceCallController::class, 'joinCall'])->name('voice-call.join');
+    // Route pour terminer un appel vidéo
+    Route::post('voice-call/end/{callId}', [VoiceCallController::class, 'endCall'])->name('voice-call.end');
+    // Endpoint pour envoyer une offre WebRTC (initiateur)
+    Route::post('voice-call/send-offer/{callId}', [VoiceCallController::class, 'sendOffer'])->name('voice-call.send-offer');
+    // Endpoint pour envoyer une réponse WebRTC (destinataire)
+    Route::post('voice-call/send-answer/{callId}', [VoiceCallController::class, 'sendAnswer'])->name('voice-call.send-answer');
+    // Endpoint pour envoyer un candidat ICE WebRTC (initiateur ou destinataire)
+    Route::post('voice-call/send-ice-candidate/{callId}', [VoiceCallController::class, 'sendIceCandidate'])->name('voice-call.send-ice-candidate');
 });
+
+
+
