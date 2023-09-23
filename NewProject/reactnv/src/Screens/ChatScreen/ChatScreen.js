@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -11,10 +11,11 @@ import {
   Modal,
   Button,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import axios from 'axios';
+import EncryptionExplanation from './EncryptionExplanation';
 import ProfilePic from '../../../assets/images/ProfilePic.png';
 import MultiSelectDropdown from '../../Compenents/MultiSelectDropdown/MultiSelectDropdown';
 
@@ -30,9 +31,9 @@ const ChatScreen = () => {
   const [textInputValue, setTextInputValue] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const handleDropdownSelect = (options) => {
-    const selectedIds = options.map((option) =>
-      users.find((user) => user.username === option)?.id
+  const handleDropdownSelect = options => {
+    const selectedIds = options.map(
+      option => users.find(user => user.username === option)?.id,
     );
     setSelectedOptions(selectedIds);
   };
@@ -45,26 +46,28 @@ const ChatScreen = () => {
     setShowModal(false);
   };
 
-  const handleTextInputChange = (value) => {
+  const handleTextInputChange = value => {
     setTextInputValue(value);
   };
 
-  const handleSubmit =async () => {
+  const handleSubmit = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await axios.post(`${API_BASE_URL}/group`, {
-        user_id : selectedOptions,
-        name : textInputValue
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        `${API_BASE_URL}/group`,
+        {
+          user_id: selectedOptions,
+          name: textInputValue,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       if (response.data.success) {
         setChats(response.data.data.items);
-    
       } else {
         console.error('Error while loading chats:', response.data.message);
       }
@@ -84,8 +87,8 @@ const ChatScreen = () => {
     React.useCallback(() => {
       fetchChats();
       fetchUsers();
-      console.log(name.name)
-    }, [])
+      console.log(name.name);
+    }, []),
   );
 
   useEffect(() => {
@@ -103,7 +106,6 @@ const ChatScreen = () => {
 
       if (response.data.success) {
         setChats(response.data.data.items);
-    
       } else {
         console.error('Error while loading chats:', response.data.message);
       }
@@ -122,7 +124,6 @@ const ChatScreen = () => {
 
       if (response.data.success) {
         setUsers(response.data.data.items);
-
       } else {
         console.error('Error while loading chats:', response.data.message);
       }
@@ -130,27 +131,50 @@ const ChatScreen = () => {
       console.error('Error while loading chats:', error.message);
     }
   };
-  const go = (itemId, contact , length) => {
+  const go = (itemId, contact, length) => {
     // Redirect or perform any other action based on the response
-    navigation.navigate('Message', { itemId, contact,length ,name: name.name });
+    navigation.navigate('Message', {itemId, contact, length, name: name.name});
   };
 
-  const RenderChatItem = ({ item }) => (
+  ///
+  const [showEncryptionExplanation, setShowEncryptionExplanation] = useState(false);
+
+const handleEncryptionTextPress = () => {
+  setShowEncryptionExplanation(true);
+};
+///
+
+  const RenderChatItem = ({item}) => (
     <TouchableOpacity
-      onPress={() => go(item.id, item.participants.length > 2 ? item.name :  item.participants[0].user.username ==name.name ?  item.participants[1].user.username :  item.participants[0].user.username,  item.participants.length)}
-      style={styles.chatItem}
-    >
+      onPress={() =>
+        go(
+          item.id,
+          item.participants.length > 2
+            ? item.name
+            : item.participants[0].user.username == name.name
+            ? item.participants[1].user.username
+            : item.participants[0].user.username,
+          item.participants.length,
+        )
+      }
+      style={styles.chatItem}>
       <Image source={ProfilePic} style={styles.profileAvatar} />
       <View style={styles.chatDetails}>
-      {item.participants.length > 2 ? (
-      <Text style={styles.chatName}>{item.name}</Text>
-    ) : (
-      <Text style={styles.chatName}>{item.participants[0].user.username ==name.name ?  item.participants[1].user.username :  item.participants[0].user.username }</Text>
-    )}
+        {item.participants.length > 2 ? (
+          <Text style={styles.chatName}>{item.name}</Text>
+        ) : (
+          <Text style={styles.chatName}>
+            {item.participants[0].user.username == name.name
+              ? item.participants[1].user.username
+              : item.participants[0].user.username}
+          </Text>
+        )}
         {item.last_message && item.last_message.message && (
           <Text style={styles.chatMessage}>{item.last_message.message}</Text>
         )}
-        {!item.last_message && <Text style={styles.chatMessage}>No messages</Text>}
+        {!item.last_message && (
+          <Text style={styles.chatMessage}>No messages</Text>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -159,25 +183,35 @@ const ChatScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Chats</Text>
-        <Button  
-        title="Add Group" 
-        onPress={handleButtonPress}  
-         />
+        <Button title="Add Group" onPress={handleButtonPress} />
       </View>
-      <TextInput placeholder="Search" clearButtonMode="always" style={styles.searchInput} />
+      <TextInput
+        placeholder="Search"
+        clearButtonMode="always"
+        style={styles.searchInput}
+      />
       <FlatList
         data={chats}
-        renderItem={({ item }) => <RenderChatItem item={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        renderItem={({item}) => <RenderChatItem item={item} />}
+        keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.chatList}
       />
+      
+      <Text style={styles.encryptionText} onPress={handleEncryptionTextPress}>
+        Your personal messages are end-to-end encrypted
+      </Text>
+
+      {showEncryptionExplanation && (
+        <EncryptionExplanation onClose={() => setShowEncryptionExplanation(false)} />
+      )}
+      
       <Modal visible={showModal} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             {/* Add your form inputs here */}
             {/* Example: */}
             <MultiSelectDropdown
-              options={users.map((user) => user.username)}
+              options={users.map(user => user.username)}
               onSelect={handleDropdownSelect}
             />
             <TextInput
@@ -200,7 +234,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -223,6 +257,13 @@ const styles = StyleSheet.create({
   chatList: {
     paddingBottom: 20,
   },
+  encryptionText: {
+    color: 'blue',  // Or your preferred color
+    textDecorationLine: 'underline',
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+
   chatItem: {
     flexDirection: 'row',
     alignItems: 'center',

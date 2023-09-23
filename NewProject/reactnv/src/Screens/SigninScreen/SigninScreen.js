@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState , useEffect} from 'react';
 import {
 View,
 Text,
@@ -14,6 +14,11 @@ import * as Animatable from 'react-native-animatable';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios';
+import randomBytes from 'react-native-randombytes';
+
+
+
+
 
 
 const SigninScreen = () => {
@@ -24,6 +29,13 @@ const [passwordError, setPasswordError] = useState(false);
 
 const navigation = useNavigation();
 
+
+
+// ... Rest of your component code
+
+
+
+
 const validateEmail = email => {
 //  const regex = /^\w+([.-]?\w+)\w+([.-]?\w+)@intellcap\.fr$/;
 const regex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
@@ -31,6 +43,19 @@ const regex = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$/;
 }
 const validatePassword = password => {
 return password.length >= 6;
+};
+
+const generateEncryptionKey = () => {
+  // Generate a random 256-bit (32-byte) key
+  randomBytes(32, (err, bytes) => {
+    if (!err) {
+      const key = bytes.toString('hex');
+      console.log('Generated Encryption Key:', key);
+      setEncryptionKey(key);
+    } else {
+      console.error('Error generating encryption key:', err);
+    }
+  });
 };
 
 

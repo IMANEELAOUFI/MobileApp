@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet,Button,Linking } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ProfilePic from '../../../assets/images/ProfilePic.png';
@@ -30,6 +30,10 @@ const ChatMessages = () => {
     console.log(name);
     console.log(length);
   }, []);
+
+   
+
+
 
   const fetchMessages = async () => {
     try {
