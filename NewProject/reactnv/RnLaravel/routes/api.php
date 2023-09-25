@@ -44,6 +44,7 @@ Route::middleware('auth:user')->group(function () {
     Route::post('chat_message/{chatId}/upload', [ChatMessageController::class, 'upload'])->name('message');
     Route::get('chat_message/{chatId}/{page}', [ChatMessageController::class, 'index'])->name('chat_message.index');
     Route::get('saved', [ChatMessageController::class, 'savedmessages'])->name('saved');
+    Route::get('chat_groups', [ChatController::class, 'getAllChats']);
 
 });
 

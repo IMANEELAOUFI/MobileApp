@@ -35,7 +35,7 @@ class ChatController extends Controller
     ->with('lastMessage.user', 'participants.user')
     ->latest('updated_at')
     ->get();
-    
+
         return $this->successWithMsg($chats);
     }
 
@@ -51,9 +51,9 @@ class ChatController extends Controller
         if ($data['userId'] === $data['otherUserId']) {
             return $this->error('You cannot create a chat with yourself');
         }
-    
+
         $previousChat = $this->getPreviousChat($data['otherUserId']);
-    
+
         if($previousChat === null){
 
             $chat = Chat::create($data['data']);
@@ -64,35 +64,35 @@ class ChatController extends Controller
                 [
                     'user_id'=>$data['otherUserId']
                 ],
-    
+
             ]);
 
             $chat->refresh()->load('lastMessage.user','participants.user');
             return $this->successWithMsg($chat);
         }
-    
+
         return $this->successWithMsg($previousChat->load('lastMessage.user', 'participants.user'));
     }
 
     //--------------------------------------------------------------------------------------------------------------------
-    
+
     public function group(StoreChatRequest $request): JsonResponse
     {
         $data = $this->prepareGroup($request);
         if ($data['userId'] === $data['otherUserId']) {
             return $this->error('You cannot create a chat with yourself');
         }
-    
+
             $chat = Chat::create($data['data']);
             $participantIds = array_merge([$data['userId']], $data['otherUserId']);
-    
+
             $participants = [];
             foreach ($participantIds as $participantId) {
                 $participants[] = ['user_id' => $participantId];
             }
-    
+
             $chat->participants()->createMany($participants);
-    
+
             $chat->refresh()->load('lastMessage.user', 'participants.user');
             return $this->successWithMsg($chat);
 
@@ -188,6 +188,18 @@ class ChatController extends Controller
         return $this->successWithMsg($chat);
     }
 
+ /**
+     * Gets all chats
+     *
+     * @return JsonResponse
+     */
+    public function getAllChats(): JsonResponse
+    {
+        $chats = Chat::with('lastMessage.user', 'participants.user')
+            ->latest('updated_at')
+            ->get();
 
-    
+        return $this->successWithMsg($chats);
+    }
+
 }

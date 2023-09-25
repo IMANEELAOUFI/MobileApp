@@ -22,7 +22,7 @@ import ChatScreen from '../Screens/ChatScreen/ChatScreen';
 import PdfScreen from '../Screens/ChatScreen/PdfScreen';
 import ContactScreen from '../Screens/ChatScreen/ContactScreen';
 import ChangePasswordScreen from '../Screens/SettingScreen/ChangePasswordScreen';
-
+import GroupsScreen from '../Screens/GroupScreen/GroupScreen';
 
 
 
@@ -59,6 +59,11 @@ function SaDocs() {
   function FileScreen() {
     return (       
       <PdfScreen/>    
+    );
+  }
+  function GroupsScreenFunc() {
+    return (
+      <GroupsScreen />
     );
   }
 
@@ -116,6 +121,14 @@ function SaDocs() {
             ),
           }} />
 
+           <Tab.Screen name="Groups" component={GroupsScreenFunc}
+           options={{
+           tabBarLabel: 'Groups',
+           tabBarIcon: ({ color, size }) => (
+           <Feather name="Groups" color={color} size={size} />
+           ),
+           }} />
+
           <Tab.Screen name="Settings" component={SettingScreen}
           options={{
             tabBarLabel: 'Settings',
@@ -123,6 +136,7 @@ function SaDocs() {
               <Feather name="settings" color={color} size={size} />
             ),
           }} />
+
         </Tab.Navigator>
 
     );
